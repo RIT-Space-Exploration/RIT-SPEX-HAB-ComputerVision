@@ -1,7 +1,9 @@
-#include <opencv2/highgui.hpp>
 #include <iostream>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 using namespace cv;
 using namespace std;
 
-void detectAndDrawLines(Mat src, Mat dest);
+vector<Vec4i> houghLinesAndDraw(Mat src, Mat &dest);
