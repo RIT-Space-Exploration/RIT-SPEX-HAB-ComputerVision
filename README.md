@@ -20,4 +20,5 @@ Use the following commands to start the horizon detection application:
 * ./RIT\_SPEX\_Horizon \<cam1Index\> \<cam2Index\>
 
 Replace \<cam1Index\> and \<cam2Index\> with respective indecies.
+
 Note: if no camera index arguments are supplied, defaults are 0 and 1.
