@@ -22,23 +22,26 @@ using namespace std;
  * The vector of Vec4i containing endpoints of lines
  * detected is returned.
  */
-vector<Vec4i> houghLinesAndDraw(Mat src, Mat &dest)
+bool houghLinesAndDraw(Mat src, Mat& dest)
 {
     Mat cdest;
     int LThresh = 50;
-    int HThresh = 200;
+    int HThresh = 100;
     int KernelSize = 3;
     int rhoRes = 1;
     double thetaRes = CV_PI/180;
-    int IntersectThresh = 50;
-    int minLineLen = 50;
+    int IntersectThresh = 10;
+    int minLineLen = 10;
     int maxLineGap = 10;
+    bool detectedLines = false;
 
-    // Convert src to grayscale store in cdest
-    cvtColor(src, cdest, COLOR_GRAY2BGR);
+    // make empty vector of Vec4i for detected line endpoints.
+    vector<Vec4i> lines;
 
-    // Apply blur to reduce noise with a 3x3 kernel
-    blur(cdest, cdest, Size(3,3));    
+    if(src.rows == 0 || src.cols == 0)
+    {
+        return detectedLines;
+    }
 
     /* src -> source image
      * cdest -> canny image
@@ -46,11 +49,10 @@ vector<Vec4i> houghLinesAndDraw(Mat src, Mat &dest)
      * HThresh -> Higher gradient threshold
      * KernelSize -> Internal Sobel filter kernel size
      */
-    Canny(cdest, cdest, LThresh, HThresh, KernelSize);
+    Canny(src, cdest, LThresh, HThresh, KernelSize);
 
-    // make empty vector of Vec4i for detected line endpoints.
-    vector<Vec4i> lines;
-
+    // Convert src to grayscale store in cdest
+    //cvtColor(cdest, cdest, COLOR_BGR2GRAY);
     /* cdest -> image to dected lines in.
      * lines -> vector of Vec4i to store detected line endpoints.
      * rhoRes -> resolution of Rho in pixels.
@@ -67,9 +69,13 @@ vector<Vec4i> houghLinesAndDraw(Mat src, Mat &dest)
     for(int i = 0; i < lines.size(); i++)
     {
         Vec4i l = lines[i];
-        line(dest, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,0,255), 3, CV_AA);
+        line(src, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(0,0,255), 3, CV_AA);
+        detectedLines = true;
     }
 
-    // return list of detected lines
-    return lines;
+    // set dest image as drawn over src image
+    dest = src;
+
+    // return bool indicating detected lines
+    return detectedLines;
 }

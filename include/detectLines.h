@@ -15,5 +15,5 @@
 using namespace cv;
 using namespace std;
 
-vector<Vec4i> houghLinesAndDraw(Mat src, Mat &dest);
+bool houghLinesAndDraw(Mat src, Mat& dest);
 #endif

@@ -10,6 +10,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "../include/detectLines.h"
+#include <unistd.h>
 
 using namespace cv;
 using namespace std;
@@ -17,10 +18,11 @@ using namespace std;
 int VidIndexInt1 = 0;
 int VidIndexInt2 = 1;
 
-char* frameIndxCam1;
-char* frameIndxCam2;
+char frameIndxCam1[512];
+char frameIndxCam2[512];
 
 unsigned long frameCount = 0;
+int delay = 500000;
 
 // usecase help message
 void printHelpMessage()
@@ -72,10 +74,10 @@ int main(int argc, char** argv)
         // try to capture a frame
         bool successCam1 = cap1.read(curFrameCam1);
         bool successCam2 = cap2.read(curFrameCam2);
-        frameCount++;
+	frameCount++;
 
-        sprintf(frameIndxCam1, "../../images/Cam1_frameIndex%lu.png", frameCount);
-        sprintf(frameIndxCam2, "../../images/Cam2_frameIndex%lu.png", frameCount);
+        sprintf(frameIndxCam1, "Cam1_frameIndex%lu.png", frameCount);
+        sprintf(frameIndxCam2, "Cam2_frameIndex%lu.png", frameCount);
 
         // save off captures if sucessful
         if(successCam1)
@@ -92,28 +94,20 @@ int main(int argc, char** argv)
         Mat destFrameCam2;
 
         // attempt to find horizons
-        VecCam1 = houghLinesAndDraw(curFrameCam1, destFrameCam1);
-        VecCam2 = houghLinesAndDraw(curFrameCam2, destFrameCam2);
+        bool detectedCam1 = houghLinesAndDraw(curFrameCam1, destFrameCam1);
+        bool detectedCam2 = houghLinesAndDraw(curFrameCam2, destFrameCam2);
 
         // Save off frame with detected lines drawn on.
-        if(VecCam1.size() != 0)
+        if(detectedCam1)
         {
-            sprintf(frameIndxCam1, "../../images/LinesCam1_frameIndex%lu.png", frameCount);
+            sprintf(frameIndxCam1, "LinesDetectedCam1FrameIndex%lu.png", frameCount);
             imwrite(frameIndxCam1, destFrameCam1);
         }
-        if(VecCam2.size() != 0)
+        if(detectedCam2)
         {
-            sprintf(frameIndxCam2, "../../images/LinesCam2_frameIndex%lu.png", frameCount);
+            sprintf(frameIndxCam2, "LinesDetectedCam2FrameIndex%lu.png", frameCount);
             imwrite(frameIndxCam2, destFrameCam2);
         }
-
-        // wait two seconds before looping again
-        char keyStroke = (char) waitKey(2000);
-        
-        // break out if escape is pressed
-        if(keyStroke == 27)
-        {
-            break;
-        }
+	usleep(delay);
     }
 }
