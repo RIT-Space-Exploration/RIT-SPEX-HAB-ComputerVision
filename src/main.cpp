@@ -22,7 +22,7 @@ char frameIndxCam1[512];
 char frameIndxCam2[512];
 
 unsigned long frameCount = 0;
-int delay = 1000000;
+int delay = 1000000; //delay in microseconds between frame captures
 
 // usecase help message
 void printHelpMessage()
