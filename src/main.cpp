@@ -10,7 +10,10 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "../include/detectLines.h"
+#include <stdio.h>
 #include <unistd.h>
+
+#define DELAY 1000000
 
 using namespace cv;
 using namespace std;
@@ -22,7 +25,6 @@ char frameIndxCam1[512];
 char frameIndxCam2[512];
 
 unsigned long frameCount = 0;
-int delay = 1000000; //delay in microseconds between frame captures
 
 // usecase help message
 void printHelpMessage()
@@ -74,7 +76,7 @@ int main(int argc, char** argv)
         // try to capture a frame
         bool successCam1 = cap1.read(curFrameCam1);
         bool successCam2 = cap2.read(curFrameCam2);
-	frameCount++;
+        frameCount++;
 
         sprintf(frameIndxCam1, "Cam1_frameIndex%lu.png", frameCount);
         sprintf(frameIndxCam2, "Cam2_frameIndex%lu.png", frameCount);
@@ -97,7 +99,7 @@ int main(int argc, char** argv)
         bool detectedCam1 = houghLinesAndDraw(curFrameCam1, destFrameCam1);
         bool detectedCam2 = houghLinesAndDraw(curFrameCam2, destFrameCam2);
 
-        // Save off frame with detected lines drawn on.
+        // Save off frame with detected lines drawn on
         if(detectedCam1)
         {
             sprintf(frameIndxCam1, "LinesDetectedCam1FrameIndex%lu.png", frameCount);
@@ -108,6 +110,6 @@ int main(int argc, char** argv)
             sprintf(frameIndxCam2, "LinesDetectedCam2FrameIndex%lu.png", frameCount);
             imwrite(frameIndxCam2, destFrameCam2);
         }
-	usleep(delay);
+    usleep(DELAY);
     }
 }
