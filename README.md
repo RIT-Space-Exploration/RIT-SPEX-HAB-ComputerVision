@@ -1,7 +1,7 @@
 # RIT-SPEX-HAB-ComputerVision
 This code provides horizon detection functionality for RIT SPEX HAB weather balloon.
 
-## Build Dependenecies
+## Build Dependencies
 The build proccess depends on OpenCV 2.4.9 (or greater) C++ libraries being installed. 
 
 ## Build Instructions
