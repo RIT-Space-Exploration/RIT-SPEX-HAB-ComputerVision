@@ -18,14 +18,6 @@
 using namespace cv;
 using namespace std;
 
-int VidIndexInt1 = 0;
-int VidIndexInt2 = 1;
-
-char frameIndxCam1[512];
-char frameIndxCam2[512];
-
-unsigned long frameCount = 0;
-
 // usecase help message
 void printHelpMessage()
 {
@@ -37,6 +29,20 @@ void printHelpMessage()
 
 int main(int argc, char** argv)
 {
+
+    // used to keep track of V4L camera index 
+    int VidIndexInt1 = 0;
+    int VidIndexInt2 = 1;
+
+    // used to hold file name for current frame
+    // being written to disk
+    char frameIndxCam1[512];
+    char frameIndxCam2[512];
+
+    // used to hold the count of total frames 
+    // taken from webcams
+    unsigned long frameCount = 0;
+
     // check for non-default indexes
     if(argc > 2)
     {
